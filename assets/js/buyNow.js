@@ -83,4 +83,17 @@ window.onload = () => {
   const target = document.querySelector('div.quantity')
 
   iObserver.observe(target)
+
+  // update main price on variation selected
+  const priceEle = document.querySelector('.price-wrapper .product-page-price')
+  const variationPriceContainer = document.querySelector('.single_variation_wrap')
+
+  const pObserver = new MutationObserver((mutationList, obs) => {
+    for (const mutation of mutationList) {
+      if (mutation.type === 'childList') {
+        priceEle.innerHTML = variationPriceContainer.querySelector('.woocommerce-variation-price').innerHTML
+      }
+    }
+  })
+  pObserver.observe(variationPriceContainer, { childList: true, subtree: true })
 }

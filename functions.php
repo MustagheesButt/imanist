@@ -384,7 +384,7 @@ function wishlist_and_share_single_prod()
 {
 	// display wishlist button and share button
 ?>
-	<div class="flex items-center">
+	<div id="product-actions" class="flex items-center">
 		<?= do_shortcode('[yith_wcwl_add_to_wishlist]') ?>
 
 		<?php if (get_theme_mod('product_info_share', 1)) { ?>
