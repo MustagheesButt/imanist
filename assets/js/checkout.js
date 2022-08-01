@@ -43,15 +43,14 @@ window.onload = () => {
         phoneEle.required = false
         phoneEle.value = emailInput.value
 
-        // if phone number, create a hidden input for billing_email with a dummy email address
+        // if phone number, create an optional input for billing_email
         emailInput.name = "shipping_phone"
-        createDummyEmailField(emailWrapperEle)
+        createOptionalEmailField(emailWrapperEle)
       } else {
         resetPhoneEle()
         emailPhoneError.style.display = 'block'
         emailInput.name = "billing_email"
-        destroyDummyEmail()
-        console.log('else condition')
+        destroyOptionalEmail()
       }
     } catch (error) {
       if (!EMAIL_REGEX.test(emailInput.value) && emailInput.value !== '') {
@@ -59,7 +58,7 @@ window.onload = () => {
       }
       // if is email then keep phone field visible
       resetPhoneEle()
-      destroyDummyEmail()
+      destroyOptionalEmail()
       emailInput.name = "billing_email"
     }
   }
@@ -80,35 +79,57 @@ window.onload = () => {
     phoneEle.value = ''
   }
 
-  // function createDummyEmailField(appendTo) {
-  //   if (document.querySelector('input#dummy-email')) return
+  function createOptionalEmailField(appendTo) {
+    if (document.querySelector('input#optional-email')) return
 
-  //   const emailEle = document.createElement('input')
-  //   emailEle.name = 'billing_email'
-  //   emailEle.type = 'hidden'
-  //   emailEle.id = 'dummy-email'
-  //   appendTo.appendChild(emailEle)
-  //   handleDummyEmail()
+    const emailEle = document.createElement('input')
+    emailEle.name = 'billing_email'
+    emailEle.type = 'email'
+    emailEle.id = 'optional-email'
+    emailEle.placeholder = "Optional Email"
+    emailEle.classList.add('mt-3')
+    appendTo.appendChild(emailEle)
+    // handleDummyEmail()
 
-  //   const fNameEle = document.querySelector('input[name=shipping_first_name]')
-  //   const lNameEle = document.querySelector('input[name=shipping_last_name]')
-  //   fNameEle.onchange = handleDummyEmail
-  //   lNameEle.onchange = handleDummyEmail
-  // }
+    // const fNameEle = document.querySelector('input[name=shipping_first_name]')
+    // const lNameEle = document.querySelector('input[name=shipping_last_name]')
+    // fNameEle.onchange = handleDummyEmail
+    // lNameEle.onchange = handleDummyEmail
+  }
 
-  // function handleDummyEmail() {
-  //   const emailEle = document.querySelector('#dummy-email')
-  //   if (emailEle) {
-  //     const fNameEle = document.querySelector('input[name=shipping_first_name]')
-  //     const lNameEle = document.querySelector('input[name=shipping_last_name]')
-  //     const fName = fNameEle.value.replace(/[^a-zA-Z]/g, "").toLowerCase()
-  //     const lName = lNameEle.value.replace(/[^a-zA-Z]/g, "").toLowerCase()
-  
-  //     emailEle.value = `${fName}.${lName}@imanistudio.com`
-  //   }
-  // }
+  function getDummyEmail() {
+    const fNameEle = document.querySelector('input[name=shipping_first_name]')
+    const lNameEle = document.querySelector('input[name=shipping_last_name]')
+    const fName = fNameEle.value.replace(/[^a-zA-Z]/g, "").toLowerCase()
+    const lName = lNameEle.value.replace(/[^a-zA-Z]/g, "").toLowerCase()
 
-  // function destroyDummyEmail() {
-  //   document.querySelector('#dummy-email')?.remove()
-  // }
+    let uuid = ''
+    if (crypto && crypto.randomUUID) {
+      uuid = crypto.randomUUID().split('-')[0]
+    }
+
+    return `${fName}.${lName}${uuid}@imanistudio.com`
+  }
+
+  function destroyOptionalEmail() {
+    document.querySelector('#optional-email')?.remove()
+  }
+
+  // on checkout form submit, if billing_email is empty
+  const checkoutForm = document.querySelector('form#checkout')
+  const acceptTermsBtn = document.querySelector('input[name=terms]')
+  acceptTermsBtn.onclick = (e) => {
+    const formData = new FormData(checkoutForm)
+    if (formData.get('billing_email').length === 0) {
+      // tried removing billing_email field, but it doesnt work
+      // formData.delete('billing_email')
+      // document.querySelector('input[name=billing_email]').remove()
+
+      // use a dummy email
+      const de = getDummyEmail()
+      const be = document.querySelector('input[name=billing_email]')
+      formData.set('billing_email', de)
+      be.value = de
+    }
+  }
 }

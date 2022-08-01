@@ -34,7 +34,8 @@ label {
   font-weight: 400;
 }
 
-.banner h1, .banner h2 {
+.banner h1,
+.banner h2 {
   font-weight: 400 !important;
 }
 
@@ -52,6 +53,16 @@ span.amount {
   font-weight: 600;
   src: url("/wp-content/themes/imanistudio/assets/fonts/Futura2.woff2");
 }
+#members-list-popup > section {
+  padding: 50px;
+}
+
+.mfp-close-btn-in #members-list-popup .mfp-close {
+  color: black;
+  opacity: 1;
+  mix-blend-mode: initial;
+}
+
 @media only screen and (max-width: 48em) {
   /*************** ADD MOBILE ONLY CSS HERE  ***************/
   .collapsed {
@@ -93,11 +104,12 @@ span.amount {
     font-size: 12px;
   }
   .single-product .product-info .product-title,
-.single-product .product-info .price-wrapper {
+.single-product .product-info .price-wrapper,
+.single-product .product-info .price-wrapper + p {
     text-align: center;
   }
   .single-product .product-info .price-wrapper {
-    margin: 40px 0;
+    margin: 10px 0;
   }
   .single-product div.quantity {
     text-align: center;
@@ -147,8 +159,12 @@ span.amount {
   .product-gallery .flickity-slider > div.col > a {
     display: none;
   }
-  .product-gallery .flickity-button {
+  .product-gallery .product-thumbnails .flickity-button {
     display: none;
+  }
+  .slider .flickity-prev-next-button {
+    opacity: 1;
+    background-color: rgba(255, 255, 255, 0.2705882353);
   }
   .shop-page-title .woocommerce-result-count {
     flex-basis: 100%;
@@ -156,6 +172,13 @@ span.amount {
   .shop-page-title .category-filtering,
 .shop-page-title .woocommerce-ordering {
     flex-basis: 50%;
+    height: 40px;
+    border: 1px solid #ddd;
+    margin: 0;
+    padding: 0;
+  }
+  .shop-page-title .woocommerce-ordering select {
+    margin: 0;
   }
   .flying-f .category-filtering,
 .flying-f .woocommerce-ordering {
@@ -168,19 +191,108 @@ span.amount {
   }
   .flying-f .category-filtering {
     left: 0;
-    outline: 1px solid gray;
-  }
-  .flying-f .category-filtering > a {
-    margin: 0;
   }
   .flying-f .woocommerce-ordering {
     right: 0;
   }
-  .flying-f .woocommerce-ordering > select {
-    margin: 0;
-    height: 47px;
+  .woomotiv-popup[data-position=bottom_right] {
+    bottom: 65px;
+    z-index: 1000;
+    left: 15px;
+    right: 15px;
+  }
+  .single-product .woomotiv-popup[data-position=bottom_right] {
+    bottom: 110px;
+  }
+  .nav.nav-vertical {
+    padding: 10px;
+  }
+  .nav.nav-vertical li {
+    background-color: rgba(0, 0, 0, 0.05);
+    margin: 5px;
+    border-radius: 5px;
+  }
+  .nav.nav-vertical li ul.sub-menu > li,
+.nav.nav-vertical li ul.children > li {
+    background-color: transparent;
+  }
+  .nav.nav-vertical li.account-item button.toggle {
+    position: absolute;
+    top: 5px;
+    right: 0;
+  }
+  .off-canvas:not(.off-canvas-center) .nav-vertical li > a {
+    padding-left: 10px;
+  }
+  .footer-wrapper {
+    margin-bottom: 100px;
+  }
+  .header-search.current-dropdown ul.nav-dropdown {
+    left: -70vw;
+  }
+  .rank-math-breadcrumb,
+.product-info p.stock {
+    text-align: center;
+  }
+  #members-list-popup > section {
+    padding: 15px;
+  }
+  /* On mobile the overlay doesnt stays fixed cuz of some stupid JS */
+  .mfp-wrap {
+    position: fixed !important;
+    top: 0 !important;
   }
 }
+.single-product .product-info .price-wrapper,
+.single-product .product-info .product-title {
+  font-weight: 300;
+}
+
+@media (max-width: 849px) {
+  .header-main li.html.custom {
+    display: initial;
+  }
+}
+@media (max-width: 480px) {
+  header .dd-select label {
+    display: none !important;
+  }
+}
+div.dd-select {
+  background: none !important;
+  border: 0 !important;
+}
+
+header .dd-select label {
+  color: white !important;
+}
+header .dd-select .dd-pointer:not(.dd-pointer-up) {
+  border-top-color: white !important;
+}
+header .dd-pointer-up {
+  border-bottom-color: white !important;
+}
+
+a.dd-selected {
+  padding: 0 !important;
+  padding-right: 10px !important;
+}
+
+a.dd-option {
+  padding: 3px !important;
+}
+
+label.dd-selected-text,
+label.dd-option-text {
+  display: inline-block !important;
+  line-height: 30px !important;
+}
+
+img.dd-selected-image,
+img.dd-option-image {
+  max-width: 25px;
+}
+
 .header .flex-row {
   height: 100%;
   max-width: 1280px !important;
@@ -339,6 +451,13 @@ span.amount {
   white-space: unset;
 }
 
+.product-small .woocommerce-loop-product__title {
+  width: 90%;
+}
+.product-small i.yith-wcwl-icon {
+  margin-right: 0;
+}
+
 .product-main {
   padding: 10px 0;
 }
@@ -436,12 +555,14 @@ table.variations th.label {
   font-size: 18px;
 }
 
-.woocommerce-variation.single_variation {
-  display: none !important;
+.woocommerce-variation.single_variation .woocommerce-variation-description,
+.woocommerce-variation.single_variation .woocommerce-variation-price {
+  display: none;
 }
 
 .ux-swatch.out-of-stock {
   pointer-events: none;
+  background-color: #ddd;
 }
 
 .nav-dropdown li.wishlist-account-element {
@@ -495,11 +616,150 @@ del span.woocommerce-Price-amount.amount {
   letter-spacing: 0.2em;
 }
 
+.header-search ul.nav-dropdown {
+  width: 100vw;
+}
+
 .container-width,
 .full-width .ubermenu-nav,
 .container,
 .row {
-  max-width: 1500px;
+  max-width: 1500px !important;
+}
+
+#fixed-social-links {
+  position: fixed;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  margin: auto;
+}
+#fixed-social-links .icon {
+  outline: 1px solid;
+  margin-bottom: 0;
+  margin-right: 0;
+}
+#fixed-social-links .fb-messenger {
+  background-color: #0a7cff;
+  fill: white;
+}
+#fixed-social-links .fb-messenger > svg {
+  vertical-align: sub;
+}
+#fixed-social-links .whatsapp {
+  background-color: #51cb5a;
+  color: white !important;
+  border: none;
+}
+#fixed-social-links .instagram {
+  color: white !important;
+  background: #d6249f;
+  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.25);
+}
+
+.accordion {
+  margin: 10px auto;
+  color: black;
+  background-color: white;
+}
+.accordion .container {
+  position: relative;
+  margin: 5px 5px;
+}
+.accordion .container > img {
+  width: 35px;
+}
+.accordion .label {
+  /* Positions the labels relative to the .container. Adds padding to the top and bottom and increases font size. Also makes its cursor a pointer */
+  position: relative;
+  padding: 10px 0;
+  font-size: 16px;
+  color: black;
+  cursor: pointer;
+  display: inline-block;
+  width: 85%;
+}
+.accordion .label::before {
+  content: "+";
+  color: black;
+  position: absolute;
+  top: 50%;
+  right: -5px;
+  font-size: 30px;
+  transform: translateY(-50%);
+}
+.accordion .content {
+  /* Hides the content (height: 0), decreases font size, justifies text and adds transition */
+  position: relative;
+  background: white;
+  max-height: 0;
+  text-align: justify;
+  width: 100%;
+  overflow: hidden;
+  transition: 0.5s;
+}
+.accordion hr {
+  /* Adds a horizontal line between the contents */
+  margin-left: 0;
+  border: 1px solid grey;
+}
+.accordion .container.active .content {
+  max-height: 1500px;
+}
+.accordion .container.active .label::before {
+  /* Changes from plus sign to negative sign once active */
+  content: "-";
+  font-size: 30px;
+}
+
+.whatsapp-desktop {
+  line-height: 30px;
+  padding: 5px;
+  color: #fff;
+  background: #1cbd58;
+  text-align: center;
+  display: block;
+  border-radius: 5px;
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+}
+
+.whatsapp-desktop .whatsapp-btn img {
+  width: 35px;
+  height: 35px;
+  margin-top: 0px;
+}
+
+.whats-txtt {
+  line-height: 34px;
+  color: #fff;
+}
+
+.buyers-icons {
+  display: flex;
+  flex-wrap: wrap;
+}
+.buyers-icons img {
+  width: 60px;
+  margin: auto;
+  text-align: center;
+}
+
+.payment-icons {
+  width: 240px;
+}
+
+#search-lightbox {
+  margin-top: -40vh;
 }
 
 /* Following 2 rules should be in CheckoutWC > Appearance > Custom CSS */

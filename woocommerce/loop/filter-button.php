@@ -24,7 +24,7 @@ $filter_text        = $custom_filter_text ? $custom_filter_text : __('Filter', '
 <div class="category-filtering category-filter-row <?php echo esc_attr($class); ?>">
 	<a href="#" data-open="#shop-sidebar" <?php echo wp_kses($after, array('data-visible-after' => array())); ?> data-pos="left" class="filter-button uppercase plain">
 		<i class="fa fa-filter"></i>
-		<strong><?php echo esc_html($filter_text); ?></strong>
+		<span><?php echo esc_html($filter_text); ?></span>
 	</a>
 	<div class="inline-block">
 		<?php the_widget('WC_Widget_Layered_Nav_Filters'); ?>

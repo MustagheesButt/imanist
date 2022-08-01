@@ -1,0 +1,1 @@
+Run `npx mix` to compile assets/style.scss

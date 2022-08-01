@@ -51,7 +51,7 @@ if ($product->is_in_stock()) : ?>
 		<div class="add-to-cart-container">
 			<?php do_action('woocommerce_before_add_to_cart_button'); ?>
 
-			<button type="submit" name="add-to-cart" value="<?php echo esc_attr($product->get_id()); ?>" class="single_add_to_cart_button button primary is-outline"><?php echo esc_html($product->single_add_to_cart_text()); ?></button>
+			<button type="submit" name="add-to-cart" value="<?php echo esc_attr($product->get_id()); ?>" class="single_add_to_cart_button button primary is-outline ajax_add_to_cart add_to_cart_button" data-product_id="<?= get_the_ID(); ?>"><?php echo esc_html($product->single_add_to_cart_text()); ?></button>
 
 			<?php do_action('woocommerce_after_add_to_cart_button'); ?>
 		</div>

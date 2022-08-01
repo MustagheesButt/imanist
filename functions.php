@@ -82,7 +82,8 @@ function imani_custom_variable_price_html($price, $product)
 
 		if ($min_price !== $max_price) {
 			// $price = wc_format_price_range( $min_price, $max_price );
-			$price = wc_format_sale_price(wc_price($min_reg_price), wc_price($min_price));
+			$price = "From " . wc_price($min_price) . " to " . wc_price($max_price);
+			// $price = wc_format_sale_price(wc_price($min_reg_price), wc_price($min_price));
 		}
 	}
 
@@ -93,105 +94,6 @@ add_filter('woocommerce_variable_price_html', 'imani_custom_variable_price_html'
 add_action('wp_footer', 'custom_styling_scripts');
 function custom_styling_scripts()
 { ?>
-	<style>
-		.accordion {
-			margin: 10px auto;
-			color: black;
-			background-color: white;
-		}
-
-		.accordion .container {
-			position: relative;
-			margin: 5px 5px;
-		}
-
-		/* Positions the labels relative to the .container. Adds padding to the top and bottom and increases font size. Also makes its cursor a pointer */
-
-		.accordion .label {
-			position: relative;
-			padding: 10px 0;
-			font-size: 16px;
-			color: black;
-			cursor: pointer;
-		}
-
-		.accordion .label::before {
-			content: '+';
-			color: black;
-			position: absolute;
-			top: 50%;
-			right: -5px;
-			font-size: 30px;
-			transform: translateY(-50%);
-		}
-
-		/* Hides the content (height: 0), decreases font size, justifies text and adds transition */
-
-		.accordion .content {
-			position: relative;
-			background: white;
-			max-height: 0;
-			text-align: justify;
-			width: 100%;
-			overflow: hidden;
-			transition: 0.5s;
-		}
-
-		/* Adds a horizontal line between the contents */
-
-		.accordion hr {
-
-			margin-left: 0;
-			border: 1px solid grey;
-		}
-
-		.accordion .container.active .content {
-			max-height: 1500px;
-		}
-
-		/* Changes from plus sign to negative sign once active */
-
-		.accordion .container.active .label::before {
-			content: '-';
-			font-size: 30px;
-		}
-
-		.whatsapp-desktop {
-			line-height: 30px;
-			padding: 5px;
-			color: #fff;
-			background: #1cbd58;
-			text-align: center;
-			display: block;
-			border-radius: 5px;
-			width: 100%;
-			height: auto;
-			display: flex;
-			justify-content: center;
-		}
-
-		.whatsapp-desktop .whatsapp-btn img {
-			width: 35px;
-			height: 35px;
-			margin-top: 0px;
-		}
-
-		.whats-txtt {
-			line-height: 34px;
-			color: #fff;
-		}
-
-		.buyers-icons img {
-			width: 60px;
-			margin: auto;
-			text-align: center;
-		}
-
-		.buyers-icons {
-			display: flex;
-			flex-wrap: wrap;
-		}
-	</style>
 	<script>
 		const accordion = document.getElementsByClassName('container');
 
@@ -287,6 +189,29 @@ function customize_shop_page_product_title()
 }
 add_action('woocommerce_shop_loop_item_title', 'customize_shop_page_product_title');
 
+function floating_social_links()
+{
+?>
+	<div id="fixed-social-links">
+		<!-- <a href="https://facebook.com/ImaniStudio/" target="_blank" class="icon button circle facebook">
+			<i class="icon-facebook"></i>
+		</a> -->
+		<a href="https://messenger.com/ImaniStudio/" target="_blank" class="icon button fb-messenger">
+			<svg style="width: 20px; height: 20px;">
+				<use href="#fb-messenger" />
+			</svg>
+		</a>
+		<a href="https://www.instagram.com/imani.studio/" target="_blank" class="icon button instagram">
+			<i class="icon-instagram"></i>
+		</a>
+		<a href="https://wa.me/447734982915" target="_blank" class="icon button whatsapp">
+			<i class="icon-whatsapp"></i>
+		</a>
+	</div>
+<?php
+}
+add_action('wp_footer', 'floating_social_links');
+
 // add_action( 'woocommerce_checkout_after_terms_and_conditions', 'example_required_checkbox' );
 
 // function example_required_checkbox() {
@@ -343,9 +268,9 @@ add_action('woocommerce_shop_loop_item_title', 'customize_shop_page_product_titl
 function imani_product_meta_links()
 {
 	global $product;
-	
+
 	$product_id = $product->get_id(); // The product ID
-	
+
 	$brands = get_the_terms($product_id->ID, 'product_brand');
 	$brand = array_values(array_filter($brands, function ($b) {
 		return $b->parent == 0;
@@ -355,10 +280,10 @@ function imani_product_meta_links()
 	}));
 	$category_id = get_post_meta($product_id, 'rank_math_primary_product_cat', true);
 	if (!empty($category_id))
-	$category = get_term($category_id, 'product_cat');
+		$category = get_term($category_id, 'product_cat');
 	else
-	$category = get_the_terms($product->ID, 'product_cat')[0];
-	
+		$category = get_the_terms($product->ID, 'product_cat')[0];
+
 	// Displaying your custom field under the title
 	if (!empty($brand)) {
 		$brand_link = get_term_link($brand);
@@ -378,7 +303,7 @@ function imani_product_meta_links()
 		echo "<div class='category_name'>Category: <a href='{$cat_link}'><strong>{$category->name}</strong></a></div>";
 	}
 }
-add_action('woocommerce_after_add_to_cart_form', 'imani_product_meta_links', 6);
+add_action('woocommerce_after_add_to_cart_form', 'imani_product_meta_links', 20);
 
 function wishlist_and_share_single_prod()
 {
@@ -421,36 +346,47 @@ function accordin_add_after_social()
 	global $product;
 	$product_name = $product->get_title();
 	$url = get_permalink($product->ID);
-	echo '<div class="accordion-body">
-  			<div class="accordion">
-    			<div class="container">
-      				<div class="label">PRODUCT DESCRIPTION</div>
-      					<div class="content">' . do_shortcode("[product_description]") . '</div>
+?>
+	<div class="accordion-body">
+		<div class="accordion">
+			<div class="container">
+				<img loading="lazy" src="https://cdn.shopify.com/s/files/1/2337/7003/files/web-icon.jpg?v=1600436557" alt="IMG" />
+				<div class="label">PRODUCT DESCRIPTION</div>
+				<div class="content"><?= do_shortcode("[product_description]") ?></div>
+			</div>
+			<hr>
+			<div class="container">
+				<img loading="lazy" alt="IMG" src="https://cdn.shopify.com/s/files/1/2337/7003/files/web_icon-01-02.png?v=1600437074">
+				<div class="label">PRICE QUERY & CUSTOMIZATION</div>
+				<div class="content">
+					<div class="whats-ap whatsapp-desktop">
+						<span>
+							<a class="whatsapp-btn" href="https://api.whatsapp.com/send?phone=090034343565&amp;text=Hi, I want to consult about this product <?= $product_name ?> <?= $url ?>">
+								<div class="inner-whatsapp">
+									<img loading="lazy" src="<?= get_site_url() ?>/wp-content/uploads/2022/04/download imani studio.pk .webp" style="padding-right: 4px; padding-bottom: 2px;" alt="IMG" />
+									<span class="whats-txtt">Chat with fashion consultant</span>
+								</div>
+							</a>
+						</span>
 					</div>
-    <hr> 
-				<div class="container">
-      				<div class="label">PRICE QUERY & CUSTOMIZATION</div>
-      					<div class="content"><div class="whats-ap whatsapp-desktop">
-                          <span>
-                            <a class="whatsapp-btn" href="https://api.whatsapp.com/send?phone=090034343565&amp;text=Hi, I want to consult about this product ' . $product_name . ' ' . $url . '">
-                              <div class="inner-whatsapp"><img loading="lazy" src="' . get_site_url() . '/wp-content/uploads/2022/04/download imani studio.pk .webp" style="padding-right: 4px; padding-bottom: 2px;" alt="IMG"><span class="whats-txtt">Chat with fashion consultant</span></div>
-                            </a>
-                          </span>
-                                              </div></div>
 				</div>
-    <hr> 
-	<div class="container">
-      				<div class="label">BUYERS-PROTECTION</div>
-      					<div class="content"><ul class="buyers-icons">
-                          <img loading="lazy" src="' . get_site_url() . '/wp-content/uploads/2022/04/web_icon-06_7d543ae0-c407-43ef-b45c-fd6aede7ce6f imani studio.pk .webp" alt="IMG">
-                         <img loading="lazy" src="' . get_site_url() . '/wp-content/uploads/2022/04/web_icon-09_a6f6f63b-fca3-499c-b5d0-5b5ea5757450 imani studio.pk .webp" alt="IMG">
-						 <img loading="lazy" src="' . get_site_url() . '/wp-content/uploads/2022/04/web_icon-07_dbc8d784-ce32-460a-9a54-f8ad7f46f655 imani studio.pk .webp" alt="IMG">
-						 <img loading="lazy" src="' . get_site_url() . '/wp-content/uploads/2022/04/web_icon-10_e06626c3-9f91-4943-81be-9a6b4faa68bd imani studio.pk .webp" alt="IMG">
-						  </div>
+			</div>
+			<hr>
+			<div class="container">
+				<img loading="lazy" src="https://cdn.shopify.com/s/files/1/2337/7003/files/web_icon-01-03.png?v=1600437074" alt="IMG" />
+				<div class="label">BUYERS-PROTECTION</div>
+				<div class="content">
+					<ul class="buyers-icons">
+						<img loading="lazy" src="<?= get_site_url() ?>/wp-content/uploads/2022/04/web_icon-06_7d543ae0-c407-43ef-b45c-fd6aede7ce6f imani studio.pk .webp" alt="IMG" />
+						<img loading="lazy" src="<?= get_site_url() ?>/wp-content/uploads/2022/04/web_icon-09_a6f6f63b-fca3-499c-b5d0-5b5ea5757450 imani studio.pk .webp" alt="IMG" />
+						<img loading="lazy" src="<?= get_site_url() ?>/wp-content/uploads/2022/04/web_icon-07_dbc8d784-ce32-460a-9a54-f8ad7f46f655 imani studio.pk .webp" alt="IMG" />
+						<img loading="lazy" src="<?= get_site_url() ?>/wp-content/uploads/2022/04/web_icon-10_e06626c3-9f91-4943-81be-9a6b4faa68bd imani studio.pk .webp" alt="IMG" />
 				</div>
-    <hr> 
-				</div>
-			</div>';
+			</div>
+			<hr>
+		</div>
+	</div>
+<?php
 }
 add_action('woocommerce_after_add_to_cart_form', 'accordin_add_after_social');
 
@@ -630,6 +566,13 @@ function imani_change_soldout($text, $product)
 }
 add_filter('woocommerce_get_availability_text', 'imani_change_soldout', 10, 2);
 
+function imani_tab_titles($tabs)
+{
+	$tabs['description']['title'] = __( 'Dress Details', 'woocommerce' );
+	$tabs['additional_information']['title'] = __( 'Weight & Size', 'woocommerce' );
+	return $tabs;
+}
+add_filter('woocommerce_product_tabs', 'imani_tab_titles', 10, 2);
 
 // remove query strings so style.css gets loaded correctly
 function remove_query_strings()
@@ -690,8 +633,16 @@ function imani_custom_login($user, $username, $password)
 
 	return wp_authenticate_username_password(null, $username, $password);
 }
-
 add_filter('authenticate', 'imani_custom_login', 20, 3);
+
+// make billing_email optional
+function adjust_requirement_of_checkout_contact_fields( $fields ) {
+	// $fields['billing_phone']['required']    = false;
+	$fields['billing_email']['required']    = false;
+	
+	return $fields;
+}
+add_filter( 'woocommerce_billing_fields', 'adjust_requirement_of_checkout_contact_fields');
 
 // remove company field from checkout
 function remove_company_checkout_fields($fields)

@@ -44,7 +44,8 @@ window.onload = () => {
   }
 
   // disable out of stock/sold out variations
-  const variations = JSON.parse(document.querySelector('form.variations_form').dataset.product_variations)
+  const variationsData = document.querySelector('form.variations_form')?.dataset.product_variations
+  const variations = JSON.parse(variationsData || "[]")
   variations.forEach(variation => {
     if (!variation.is_in_stock) {
       const attrNames = Object.keys(variation.attributes)
@@ -58,7 +59,9 @@ window.onload = () => {
   const attrs = document.querySelectorAll('table.variations td.value')
   attrs.forEach(attr => {
     const firstInStockSwatch = attr.querySelector('div.ux-swatch:not(.out-of-stock)')
-    firstInStockSwatch?.click()
+    // if not already selected then select (could be selected by default from WC product variation settings)
+    if (!firstInStockSwatch?.classList.contains('selected'))
+      firstInStockSwatch?.click()
   })
 
   // fix add-to-cart-container
@@ -78,22 +81,28 @@ window.onload = () => {
       }
     })
   }
-  
+
   const iObserver = new IntersectionObserver(fixAddToCartContainer, options)
   const target = document.querySelector('div.quantity')
 
   iObserver.observe(target)
 
-  // update main price on variation selected
+  // update main price (and stock info) on variation selected
   const priceEle = document.querySelector('.price-wrapper .product-page-price')
   const variationPriceContainer = document.querySelector('.single_variation_wrap')
 
   const pObserver = new MutationObserver((mutationList, obs) => {
     for (const mutation of mutationList) {
       if (mutation.type === 'childList') {
-        priceEle.innerHTML = variationPriceContainer.querySelector('.woocommerce-variation-price').innerHTML
+        const variationPrice = variationPriceContainer.querySelector('.woocommerce-variation-price').innerHTML
+        // const stockInfoEle = variationPriceContainer.querySelector('.woocommerce-variation-availability').innerHTML
+        if (variationPrice.length > 0)
+          priceEle.innerHTML = variationPrice
+        // priceEle.innerHTML += `<div><small>${stockInfoEle}</small></div>`
       }
     }
   })
-  pObserver.observe(variationPriceContainer, { childList: true, subtree: true })
+  if (variationPriceContainer) {
+    pObserver.observe(variationPriceContainer, { childList: true, subtree: true })
+  }
 }
