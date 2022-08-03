@@ -6,6 +6,20 @@ Template: flatsome
 Version: 6.0.0.0.7
 */
 /*************** ADD CUSTOM CSS HERE.   ***************/
+body,
+input,
+textarea,
+button,
+select {
+  font-size: 13.6px;
+  font-family: Futura, sans-serif;
+  letter-spacing: 0.025em;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeSpeed;
+}
+
 /* Custom fonts */
 body {
   font-family: Futura, Lato, sans-serif !important;
@@ -24,6 +38,7 @@ h5,
 h6,
 .heading-font {
   font-family: Futura, Lato, sans-serif !important;
+  font-weight: 400 !important;
 }
 
 .alt-font {
@@ -53,6 +68,10 @@ span.amount {
   font-weight: 600;
   src: url("/wp-content/themes/imanistudio/assets/fonts/Futura2.woff2");
 }
+.uppercase {
+  letter-spacing: unset;
+}
+
 #members-list-popup > section {
   padding: 50px;
 }
@@ -164,21 +183,26 @@ span.amount {
   }
   .slider .flickity-prev-next-button {
     opacity: 1;
-    background-color: rgba(255, 255, 255, 0.2705882353);
+    background-color: rgba(255, 255, 255, 0.368627451);
+    border-radius: 50%;
+    height: 36px;
   }
   .shop-page-title .woocommerce-result-count {
     flex-basis: 100%;
   }
   .shop-page-title .category-filtering,
 .shop-page-title .woocommerce-ordering {
-    flex-basis: 50%;
+    flex-basis: 47%;
     height: 40px;
     border: 1px solid #ddd;
-    margin: 0;
+    margin: 4px;
     padding: 0;
   }
   .shop-page-title .woocommerce-ordering select {
     margin: 0;
+  }
+  .shop-page-title .category-filtering > div.inline-block {
+    display: none;
   }
   .flying-f .category-filtering,
 .flying-f .woocommerce-ordering {
@@ -236,6 +260,13 @@ span.amount {
   }
   #members-list-popup > section {
     padding: 15px;
+  }
+  .woocommerce-tabs .small-nav-collapse > li {
+    width: initial;
+    margin-right: 5px !important;
+  }
+  label.qty {
+    text-align: center;
   }
   /* On mobile the overlay doesnt stays fixed cuz of some stupid JS */
   .mfp-wrap {
@@ -341,6 +372,7 @@ img.dd-option-image {
   display: -webkit-box;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: gray;
 }
 
 .continue-shopping,
@@ -412,7 +444,7 @@ img.dd-option-image {
 
 #shop-sidebar span.widget-title {
   font-weight: 400 !important;
-  letter-spacing: 2px;
+  letter-spacing: 0.2em;
   display: block;
   margin-bottom: 15px;
 }
@@ -453,6 +485,7 @@ img.dd-option-image {
 
 .product-small .woocommerce-loop-product__title {
   width: 90%;
+  letter-spacing: 0.2em;
 }
 .product-small i.yith-wcwl-icon {
   margin-right: 0;
@@ -614,6 +647,10 @@ del span.woocommerce-Price-amount.amount {
 
 .header-main .nav > li > a {
   letter-spacing: 0.2em;
+  font-size: 12px;
+}
+.header-main .nav-left {
+  justify-content: center;
 }
 
 .header-search ul.nav-dropdown {
@@ -760,6 +797,16 @@ del span.woocommerce-Price-amount.amount {
 
 #search-lightbox {
   margin-top: -40vh;
+}
+
+label.qty {
+  font-size: 1em;
+}
+
+.box-tags {
+  margin-top: -30px;
+  position: absolute;
+  width: 100%;
 }
 
 /* Following 2 rules should be in CheckoutWC > Appearance > Custom CSS */

@@ -69,7 +69,7 @@ if ($out_of_stock) $classes[] = 'out-of-stock';
 				<?php if ($out_of_stock) { ?>
 					<div class="coming-soon">
 						<a href="#">Coming Soon</a>
-						<label>Notify <i class="fas fa-bell"></i></label>
+						<label data-security="bdc0e353e3" data-variation_id="<?= $product->get_id() ?>" data-product_id="<?= $product->get_id() ?>" class="cwg_popup_submit ">Notify <i class="fas fa-bell"></i></label>
 					</div>
 				<?php } elseif (str_contains($product->get_attribute('delivery'), 'Same Day Shipment')) { ?>
 					<a href="<?= get_the_permalink(); ?>" style="display: block;">

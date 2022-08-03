@@ -82,7 +82,10 @@ function imani_custom_variable_price_html($price, $product)
 
 		if ($min_price !== $max_price) {
 			// $price = wc_format_price_range( $min_price, $max_price );
-			$price = "From " . wc_price($min_price) . " to " . wc_price($max_price);
+			$price = "From " . wc_price($min_price);
+			if ($min_price !== $min_reg_price) {
+				$price = "<del>" . wc_price($min_reg_price) . "</del> " . $price;
+			}
 			// $price = wc_format_sale_price(wc_price($min_reg_price), wc_price($min_price));
 		}
 	}
@@ -538,6 +541,16 @@ function spit_category_buttons()
 }
 add_action('imani_brand_or_category_buttons', 'spit_category_buttons');
 
+// Pluggable function - for category/shop page title
+function flatsome_category_title()
+{
+	if (!get_theme_mod('category_show_title', 0)) {
+		return;
+	} ?>
+	<h1 class="shop-page-title is-xxxlarge text-center uppercase"><?php woocommerce_page_title(); ?></h1>
+<?php
+}
+
 function estimated_shipping_date()
 {
 	// $product = wc_get_product(get_the_ID());
@@ -568,8 +581,17 @@ add_filter('woocommerce_get_availability_text', 'imani_change_soldout', 10, 2);
 
 function imani_tab_titles($tabs)
 {
-	$tabs['description']['title'] = __( 'Dress Details', 'woocommerce' );
-	$tabs['additional_information']['title'] = __( 'Weight & Size', 'woocommerce' );
+	$tabs['description']['title'] = __('Dress Details', 'woocommerce');
+	$tabs['additional_information']['title'] = __('Weight & Size', 'woocommerce');
+
+	$tabs['returns'] = [
+		'title' => __('Returns & Exchange', 'woocommerce'),
+		'priority' => 60,
+		'callback' => function () {
+			echo 'Lorem ipsum consit';
+		}
+	];
+
 	return $tabs;
 }
 add_filter('woocommerce_product_tabs', 'imani_tab_titles', 10, 2);
@@ -593,6 +615,14 @@ add_action('init', 'remove_query_strings');
 function add_svg_defs()
 {
 	get_template_part("template-parts/svg-defs");
+
+	// also gonna preload fonts
+	/*
+	?>
+	 	<link rel="preload" href="/wp-content/themes/imanistudio/assets/fonts/Futura.woff2" as="font" type="font/woff2">
+	 	<link rel="preload" href="/wp-content/themes/imanistudio/assets/fonts/Futura2.woff2" as="font" type="font/woff2">
+	<?php
+	*/
 }
 add_action('wp_head', 'add_svg_defs');
 
@@ -636,13 +666,14 @@ function imani_custom_login($user, $username, $password)
 add_filter('authenticate', 'imani_custom_login', 20, 3);
 
 // make billing_email optional
-function adjust_requirement_of_checkout_contact_fields( $fields ) {
+function adjust_requirement_of_checkout_contact_fields($fields)
+{
 	// $fields['billing_phone']['required']    = false;
 	$fields['billing_email']['required']    = false;
-	
+
 	return $fields;
 }
-add_filter( 'woocommerce_billing_fields', 'adjust_requirement_of_checkout_contact_fields');
+add_filter('woocommerce_billing_fields', 'adjust_requirement_of_checkout_contact_fields');
 
 // remove company field from checkout
 function remove_company_checkout_fields($fields)
@@ -652,3 +683,9 @@ function remove_company_checkout_fields($fields)
 	return $fields;
 }
 add_filter('cfw_get_shipping_checkout_fields', 'remove_company_checkout_fields', 100, 3);
+
+function imani_billing_phone_field()
+{
+	get_template_part('template-parts/checkout-billing_phone-field');
+}
+add_action('cfw_checkout_before_shipping_address', 'imani_billing_phone_field');
