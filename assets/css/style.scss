@@ -88,6 +88,19 @@ span.amount {
   mix-blend-mode: initial;
 }
 
+.jumbotron .flickity-viewport {
+  height: 500px !important;
+
+  .forgiveness,
+  .forgiveness * {
+    height: 100%;
+  }
+}
+
+.jumbotron img {
+  object-fit: cover;
+}
+
 @media only screen and (max-width: 48em) {
   /*************** ADD MOBILE ONLY CSS HERE  ***************/
 
@@ -141,7 +154,8 @@ span.amount {
 
       .product-title,
       .price-wrapper,
-      .price-wrapper+p {
+      .price-wrapper+p,
+      .sold-out {
         text-align: center;
       }
 
@@ -159,8 +173,8 @@ span.amount {
   #product-actions {
     flex-direction: column;
     position: absolute;
-    top: 80px;
-    right: 5px;
+    top: 60px;
+    right: 12px;
 
     .custom-share-btn .social-icons {
       left: -185px;
@@ -232,17 +246,24 @@ span.amount {
     flex-basis: 47%;
     height: 40px;
     border: 1px solid #ddd;
-    margin: 4px;
     padding: 0;
   }
 
   .shop-page-title {
     .woocommerce-ordering select {
       margin: 0;
+      border: none;
+      height: 100%;
     }
 
-    .category-filtering>div.inline-block {
-      display: none;
+    .category-filtering {
+      .filter-button {
+        margin-top: 0.8em;
+      }
+
+      >div.inline-block {
+        display: none;
+      }
     }
   }
 
@@ -307,10 +328,6 @@ span.amount {
     margin-bottom: 100px;
   }
 
-  .header-search.current-dropdown ul.nav-dropdown {
-    left: -70vw;
-  }
-
   .rank-math-breadcrumb,
   .product-info p.stock {
     text-align: center;
@@ -324,12 +341,16 @@ span.amount {
 
   .woocommerce-tabs .small-nav-collapse>li {
     width: initial;
-    margin-right: 5px !important;
+    margin-right: 10px !important;
   }
 
 
   label.qty {
     text-align: center;
+  }
+
+  .jumbotron .flickity-viewport {
+    height: 145px !important;
   }
 
   /* On mobile the overlay doesnt stays fixed cuz of some stupid JS */
@@ -355,31 +376,9 @@ span.amount {
   }
 }
 
-@media (max-width: 480px) {
-  header .dd-select label {
-    display: none !important;
-  }
-}
-
 div.dd-select {
   background: none !important;
   border: 0 !important;
-}
-
-header {
-  .dd-select {
-    label {
-      color: white !important;
-    }
-
-    .dd-pointer:not(.dd-pointer-up) {
-      border-top-color: white !important;
-    }
-  }
-
-  .dd-pointer-up {
-    border-bottom-color: white !important;
-  }
 }
 
 a.dd-selected {
@@ -393,13 +392,41 @@ a.dd-option {
 
 label.dd-selected-text,
 label.dd-option-text {
-  display: inline-block !important;
+  display: inline-block;
   line-height: 30px !important;
 }
 
 img.dd-selected-image,
 img.dd-option-image {
   max-width: 25px;
+}
+
+header {
+  .dd-select {
+    min-width: 65px;
+
+    label {
+      color: white !important;
+    }
+
+    .dd-pointer:not(.dd-pointer-up) {
+      border-top-color: white !important;
+    }
+  }
+
+  .dd-select img,
+  .dd-options img {
+    display: none !important;
+  }
+
+  .dd-pointer-up {
+    border-bottom-color: white !important;
+  }
+
+  .dd-options label {
+    display: block;
+    text-align: center;
+  }
 }
 
 .header .flex-row {
@@ -442,7 +469,7 @@ img.dd-option-image {
 }
 
 .xoo-el-sidebar {
-  background-image: url("https://wpnullpro.com/wp-content/uploads/2022/03/download-1 imani studio.pk .webp") !important;
+  background-image: url("/wp-content/uploads/2022/03/download-1 imani studio.pk .webp") !important;
   background-size: contain !important;
 }
 
@@ -488,11 +515,15 @@ img.dd-option-image {
 }
 
 
-.shop-container>.term-description {
-  display: none;
+.shop-container>.term-description,
+.shop-container .outofstock form:not(.variations_form),
+.shop-container .outofstock .single_variation_wrap {
+  display: none !important;
 }
 
-.single-product #mobile-bot-bar {
+.single-product #mobile-bot-bar,
+.checkout-wc #mobile-bot-bar,
+.woocommerce-checkout {
   display: none !important;
 }
 
@@ -504,10 +535,15 @@ img.dd-option-image {
   }
 }
 
-.product-small .yith-wcwl-add-to-wishlist {
-  position: absolute;
-  top: 0;
-  right: 0;
+.product-small {
+  .yith-wcwl-add-to-wishlist {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+  .cwg_popup_submit {
+    display: none;
+  }
 }
 
 .yith-wcwl-add-to-wishlist {
@@ -544,6 +580,10 @@ img.dd-option-image {
     max-height: 300px;
     overflow-y: scroll;
     border-bottom: 1px solid lightgray;
+
+    >li .count {
+      display: none;
+    }
   }
 
   .widget>ul>li+li {
@@ -774,6 +814,12 @@ del span.woocommerce-Price-amount.amount {
 
 .header-search ul.nav-dropdown {
   width: 100vw;
+  left: unset !important;
+  right: -52px;
+
+  select.search_categories {
+    background-color: gray !important;
+  }
 }
 
 .container-width,
@@ -927,7 +973,12 @@ del span.woocommerce-Price-amount.amount {
 }
 
 #search-lightbox {
-  margin-top: -40vh;
+  height: 100vh;
+}
+
+.searchform-wrapper .autocomplete-suggestions {
+  max-height: 80vh;
+  font-size: 0.6em;
 }
 
 label.qty {
@@ -935,9 +986,13 @@ label.qty {
 }
 
 .box-tags {
-  margin-top: -30px;
+  bottom: 68px;
   position: absolute;
   width: 100%;
+}
+
+.stock.in-stock {
+  display: none;
 }
 
 /* Following 2 rules should be in CheckoutWC > Appearance > Custom CSS */

@@ -7,21 +7,24 @@
 **/
 
 window.onload = () => {
-  const shippingPhoneInput = document.querySelector('input[name=shipping_phone]')
-  const toCopyAbove = shippingPhoneInput.parentElement.parentElement.parentElement.parentElement.cloneNode(true)
+  const billingPhoneInput = document.querySelector('input[name=billing_phone]')
+  const toMove = billingPhoneInput.parentElement.parentElement.parentElement.parentElement
   
-  const copyBefore = document.querySelector('#billing_email_field')
+  const moveBefore = document.querySelector('#billing_email_field')
   
-  const toCopyAboveInput = toCopyAbove.querySelector('input')
-  toCopyAboveInput.name = 'billing_phone'
-  toCopyAboveInput.id = 'billing_phone'
-  toCopyAboveInput.removeAttribute('required')
-  toCopyAboveInput.setAttribute('data-parsley-required', 'false')
+  // const toCopyAboveInput = toCopyAbove.querySelector('input')
+  // toCopyAboveInput.name = 'billing_phone'
+  // toCopyAboveInput.id = 'billing_phone'
+  // toCopyAboveInput.removeAttribute('required')
+  // toCopyAboveInput.setAttribute('data-parsley-required', 'false')
 
-  toCopyAboveInput.oninput = () => {
-    if (shippingPhoneInput.value.length !== 0)
-      shippingPhoneInput.value =  toCopyAboveInput.value
-  }
+  // toCopyAboveInput.oninput = () => {
+  //   if (shippingPhoneInput.value.length !== 0)
+  //     shippingPhoneInput.value =  toCopyAboveInput.value
+  // }
   
-  copyBefore.insertAdjacentElement('beforebegin', toCopyAbove)
+  if (moveBefore)
+    moveBefore.insertAdjacentElement('beforebegin', toMove)
+  else
+    toMove.remove()
 }

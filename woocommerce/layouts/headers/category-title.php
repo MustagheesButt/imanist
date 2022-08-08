@@ -10,7 +10,7 @@
   <div style="display: flex; overflow-x: scroll;" class="container">
     <?php do_action('imani_brand_or_category_buttons'); ?>
   </div>
-  <div class="flex flex-wrap items-center medium-text-center container">
+  <div class="flex flex-wrap justify-center items-center medium-text-center container" style="gap: 5%;">
     <?php do_action('flatsome_category_title_alt'); ?>
   </div>
 </div>

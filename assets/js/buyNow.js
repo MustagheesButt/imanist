@@ -50,7 +50,7 @@ window.onload = () => {
     if (!variation.is_in_stock) {
       const attrNames = Object.keys(variation.attributes)
       const lastAttr = attrNames[attrNames.length - 1]
-      const ele = document.querySelector(`div.ux-swatches[data-attribute_name=${lastAttr}] > div[data-value=${variation.attributes[lastAttr]}]`)
+      const ele = document.querySelector(`div.ux-swatches[data-attribute_name='${lastAttr}'] > div[data-value='${variation.attributes[lastAttr]}']`)
       ele.classList.add('out-of-stock')
     }
   })
@@ -104,5 +104,15 @@ window.onload = () => {
   })
   if (variationPriceContainer) {
     pObserver.observe(variationPriceContainer, { childList: true, subtree: true })
+  }
+
+  // hide quantity label if quantity selector is not visible
+  if (document.querySelector('div.quantity').classList.contains('hidden')) {
+    document.querySelector('label.qty').classList.add('hidden')
+  }
+
+  // if out stock, hide stuff and display sold out message
+  if (document.querySelector('.shop-container .product').classList.contains('outofstock')) {
+    document.querySelector('.shop-container form').innerHTML += "<h4 class='sold-out'>Sold Out</h4>"
   }
 }

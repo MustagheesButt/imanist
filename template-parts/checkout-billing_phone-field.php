@@ -1,6 +1,6 @@
 <div class="row cfw-input-wrap-row">
-  <p class="form-row col-lg-12 cfw-tel-input cfw-input-wrap validate-required validate-phone cfw-label-is-floated" id="shipping_phone_field" data-priority="">
-    <label for="shipping_phone" class="cfw-floatable-label intl-tel-input-label">Phone&nbsp;<abbr class="required" title="required">*</abbr></label>
+  <div class="form-row col-lg-12 cfw-tel-input cfw-input-wrap validate-required validate-phone cfw-label-is-floated" id="billing_phone_field" data-priority="">
+    <label for="billing_phone" class="cfw-floatable-label intl-tel-input-label">Phone&nbsp;<abbr class="required" title="required">*</abbr></label>
     <span class="woocommerce-input-wrapper">
       <div class="iti iti--allow-dropdown">
         <div class="iti__flag-container">
@@ -1231,10 +1231,13 @@
               </div><span class="iti__country-name">Zimbabwe</span><span class="iti__dial-code">+263</span>
             </li>
           </ul>
-        </div><input type="tel" class="input-text garlic-auto-save garlic-auto-save parsley-success" name="billing_phone" id="billing_phone" placeholder="07400 123456" value="" data-parsley-trigger="keyup change focusout" data-parsley-valid-international-phone="shipping" data-persist="false" data-saved-value="" data-parsley-required="false" data-parsley-group="cfw-customer-info" autocomplete="tel" data-intl-tel-input-id="0" data-parsley-id="295">
+        </div>
+        <input type="tel" class="input-text garlic-auto-save garlic-auto-save parsley-success" name="billing_phone" id="billing_phone" placeholder="07400 123456" value="" data-parsley-trigger="keyup change focusout" data-parsley-valid-international-phone="shipping" data-persist="false" data-saved-value="" data-parsley-required="false" data-parsley-group="cfw-customer-info" autocomplete="tel" data-intl-tel-input-id="0" data-parsley-id="295" />
       </div>
     </span>
-  <ul class="parsley-errors-list" id="parsley-id-295" aria-hidden="true"></ul>
+    <ul class="parsley-errors-list" id="parsley-id-295" aria-hidden="true"></ul>
+  </div>
+  <p class="form-row col-lg-12 cfw-hidden-input cfw-input-wrap" id="shipping_phone_formatted_field" data-priority="">
+    <span class="woocommerce-input-wrapper"><input type="hidden" class="input-hidden garlic-auto-save" name="billing_phone_formatted" id="billing_phone_formatted" value="" data-saved-value="CFW_EMPTY" /></span>
   </p>
-  <p class="form-row col-lg-12 cfw-hidden-input cfw-input-wrap" id="shipping_phone_formatted_field" data-priority=""><span class="woocommerce-input-wrapper"><input type="hidden" class="input-hidden garlic-auto-save" name="shipping_phone_formatted" id="shipping_phone_formatted" value="" data-saved-value="CFW_EMPTY"></span></p>
 </div>

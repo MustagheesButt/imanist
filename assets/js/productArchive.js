@@ -16,3 +16,13 @@ window.onscroll = function () {
   else
     fixFilters(true)
 }
+
+// function for instock hack
+const instockPopup = (e) => {
+  e.target.parentElement.parentElement.parentElement.parentElement.querySelector('.cwg_popup_submit').click()
+}
+
+document.addEventListener('click', (e) => {
+  if (e.target.classList.contains('notify'))
+    instockPopup(e)
+})

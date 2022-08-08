@@ -53,7 +53,7 @@ function pop_up_js()
 					e.preventDefault();
 				});
 
-				jQuery(".xoo-el-password_cont").append('<div id="nsl-custom-login-form-main"><div class="nsl-container nsl-container-block" data-align="left"><div class="nsl-container-buttons"><a href="https://wpnullpro.com/wp-login.php?loginSocial=facebook&amp;redirect=https%3A%2F%2Fwpnullpro.com%2Fwp-admin%2F" rel="nofollow" aria-label="Continue with <b>Facebook</b>" data-plugin="nsl" data-action="connect" data-provider="facebook" data-popupwidth="600" data-popupheight="679"><div class="nsl-button nsl-button-default nsl-button-facebook" data-skin="dark" style="background-color:#1877F2;"><div class="nsl-button-svg-container"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1365.3 1365.3" height="1365.3" width="1365.3"><path d="M1365.3 682.7A682.7 682.7 0 10576 1357V880H402.7V682.7H576V532.3c0-171.1 102-265.6 257.9-265.6 74.6 0 152.8 13.3 152.8 13.3v168h-86.1c-84.8 0-111.3 52.6-111.3 106.6v128h189.4L948.4 880h-159v477a682.8 682.8 0 00576-674.3" fill="#fff"></path></svg></div><div class="nsl-button-label-container">Continue with <b>Facebook</b></div></div></a></div></div></div>');
+				jQuery(".xoo-el-password_cont").append('<div id="nsl-custom-login-form-main"><div class="nsl-container nsl-container-block" data-align="left"><div class="nsl-container-buttons"><a href="/wp-login.php?loginSocial=facebook&amp;redirect=<?= get_site_url() ?>%2Fwp-admin%2F" rel="nofollow" aria-label="Continue with <b>Facebook</b>" data-plugin="nsl" data-action="connect" data-provider="facebook" data-popupwidth="600" data-popupheight="679"><div class="nsl-button nsl-button-default nsl-button-facebook" data-skin="dark" style="background-color:#1877F2;"><div class="nsl-button-svg-container"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1365.3 1365.3" height="1365.3" width="1365.3"><path d="M1365.3 682.7A682.7 682.7 0 10576 1357V880H402.7V682.7H576V532.3c0-171.1 102-265.6 257.9-265.6 74.6 0 152.8 13.3 152.8 13.3v168h-86.1c-84.8 0-111.3 52.6-111.3 106.6v128h189.4L948.4 880h-159v477a682.8 682.8 0 00576-674.3" fill="#fff"></path></svg></div><div class="nsl-button-label-container">Continue with <b>Facebook</b></div></div></a></div></div></div>');
 			});
 		</script>
 	<?php } ?>
@@ -349,47 +349,7 @@ function accordin_add_after_social()
 	global $product;
 	$product_name = $product->get_title();
 	$url = get_permalink($product->ID);
-?>
-	<div class="accordion-body">
-		<div class="accordion">
-			<div class="container">
-				<img loading="lazy" src="https://cdn.shopify.com/s/files/1/2337/7003/files/web-icon.jpg?v=1600436557" alt="IMG" />
-				<div class="label">PRODUCT DESCRIPTION</div>
-				<div class="content"><?= do_shortcode("[product_description]") ?></div>
-			</div>
-			<hr>
-			<div class="container">
-				<img loading="lazy" alt="IMG" src="https://cdn.shopify.com/s/files/1/2337/7003/files/web_icon-01-02.png?v=1600437074">
-				<div class="label">PRICE QUERY & CUSTOMIZATION</div>
-				<div class="content">
-					<div class="whats-ap whatsapp-desktop">
-						<span>
-							<a class="whatsapp-btn" href="https://api.whatsapp.com/send?phone=090034343565&amp;text=Hi, I want to consult about this product <?= $product_name ?> <?= $url ?>">
-								<div class="inner-whatsapp">
-									<img loading="lazy" src="<?= get_site_url() ?>/wp-content/uploads/2022/04/download imani studio.pk .webp" style="padding-right: 4px; padding-bottom: 2px;" alt="IMG" />
-									<span class="whats-txtt">Chat with fashion consultant</span>
-								</div>
-							</a>
-						</span>
-					</div>
-				</div>
-			</div>
-			<hr>
-			<div class="container">
-				<img loading="lazy" src="https://cdn.shopify.com/s/files/1/2337/7003/files/web_icon-01-03.png?v=1600437074" alt="IMG" />
-				<div class="label">BUYERS-PROTECTION</div>
-				<div class="content">
-					<ul class="buyers-icons">
-						<img loading="lazy" src="<?= get_site_url() ?>/wp-content/uploads/2022/04/web_icon-06_7d543ae0-c407-43ef-b45c-fd6aede7ce6f imani studio.pk .webp" alt="IMG" />
-						<img loading="lazy" src="<?= get_site_url() ?>/wp-content/uploads/2022/04/web_icon-09_a6f6f63b-fca3-499c-b5d0-5b5ea5757450 imani studio.pk .webp" alt="IMG" />
-						<img loading="lazy" src="<?= get_site_url() ?>/wp-content/uploads/2022/04/web_icon-07_dbc8d784-ce32-460a-9a54-f8ad7f46f655 imani studio.pk .webp" alt="IMG" />
-						<img loading="lazy" src="<?= get_site_url() ?>/wp-content/uploads/2022/04/web_icon-10_e06626c3-9f91-4943-81be-9a6b4faa68bd imani studio.pk .webp" alt="IMG" />
-				</div>
-			</div>
-			<hr>
-		</div>
-	</div>
-<?php
+	get_template_part('template-parts/single-product-accordian');
 }
 add_action('woocommerce_after_add_to_cart_form', 'accordin_add_after_social');
 
@@ -404,8 +364,12 @@ function remove_actions()
 	remove_action('flatsome_category_title', 'flatsome_add_category_filter_button', 20);
 
 	remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_sharing', 50);
+
+	//remove_action('woocommerce_simple_add_to_cart', array('CWG_Instock_Notifier_Product', 'display_in_simple_product'), 31);
 }
 add_action('wp_loaded', 'remove_actions');
+
+//add_action('woocommerce_after_add_to_cart_form', array('CWG_Instock_Notifier_Product', 'display_in_simple_product'), 31);
 
 add_action('flatsome_category_title_alt', 'flatsome_add_category_filter_button', 25);
 
@@ -473,6 +437,10 @@ function flatsome_category_header()
 
 function top_seo_content()
 {
+	if (is_search()) {
+		return;
+	}
+
 	if (is_shop() || is_product_category() || is_product_tag() || is_product_taxonomy()) {
 		$queried_object = get_queried_object();
 		$content = get_term_meta($queried_object->term_id, 'cat_meta');
@@ -514,7 +482,7 @@ add_action('wp_footer', 'mobile_bot_bar');
 
 function breadcrumbs()
 {
-	if (is_front_page()) return;
+	if (!(is_product_category() || is_product_taxonomy())) return;
 ?>
 	<div class="container" style="margin-top: 15px;">
 		<?= do_shortcode('[rank_math_breadcrumb]') ?>
@@ -688,4 +656,55 @@ function imani_billing_phone_field()
 {
 	get_template_part('template-parts/checkout-billing_phone-field');
 }
-add_action('cfw_checkout_before_shipping_address', 'imani_billing_phone_field');
+//add_action('cfw_checkout_before_shipping_address', 'imani_billing_phone_field');
+
+function custom_registration_errors( $errors )
+{
+	unset($errors->errors['empty_email']);
+}
+add_filter( 'registration_errors', 'custom_registration_errors' );
+add_action( 'register_new_user', 'custom_registration_errors' );
+
+//Adding Prefix to order
+
+add_filter( 'woocommerce_order_number', 'change_woocommerce_order_number' );
+
+function change_woocommerce_order_number( $order_id ) {
+    $prefix = '#IM-';
+    $suffix = '-ST';
+    $new_order_id = $prefix . $order_id . $suffix;
+    return $new_order_id;
+}
+
+function imani_shipping_rates( $rates ) {
+
+	$cart_total_price = floatval( preg_replace( '#[^\d.]#', '', WC()->cart->get_cart_total()));
+	$cart_total_weight = WC()->cart->get_cart_contents_weight();
+	foreach ( $rates as $rate_id => $rate ) {
+		// Domestic Standard
+		if ( 'flat_rate:46' === $rate_id ) {
+			if ($cart_total_price > 50) {
+				$rates[$rate_id]->cost = 0;
+			} elseif ($cart_total_weight <= 1) {
+				$rates[$rate_id]->cost = 5.5;
+			}
+			// else {
+			// 	$rates[$rate_id]->cost = 10;
+			// }
+			// break;
+		}
+
+		// Domestic Express
+		if ( 'flat_rate:43' === $rate_id ) {
+			// if ($cart_total_weight >= 1.5) {
+			// 	$rates[$rate_id]->cost = 15;
+			// }
+			if ($cart_total_weight <= 1.5) {
+				$rates[$rate_id]->cost = 11;
+			}
+		}
+	}
+
+	return $rates;
+}
+add_filter( 'woocommerce_package_rates', 'imani_shipping_rates', 100 );
