@@ -677,9 +677,14 @@ function change_woocommerce_order_number( $order_id ) {
 }
 
 function imani_shipping_rates( $rates ) {
+	// do maths in default currency
+	global $WOOCS;
+	$default_currency_rate = $WOOCS->get_currencies()[$WOOCS->current_currency]['rate'];
 
-	$cart_total_price = floatval( preg_replace( '#[^\d.]#', '', WC()->cart->get_cart_total()));
+	$cart_total_price = floatval( WC()->cart->get_cart_contents_total() );
+	$cart_total_price = $WOOCS->back_convert($cart_total_price, $default_currency_rate, 2);
 	$cart_total_weight = WC()->cart->get_cart_contents_weight();
+
 	foreach ( $rates as $rate_id => $rate ) {
 		// Domestic Standard
 		if ( 'flat_rate:46' === $rate_id ) {
@@ -696,7 +701,7 @@ function imani_shipping_rates( $rates ) {
 
 		// Domestic Express
 		if ( 'flat_rate:43' === $rate_id ) {
-			// if ($cart_total_weight >= 1.5) {
+			// if ($cart_total_weight > 1.5) {
 			// 	$rates[$rate_id]->cost = 15;
 			// }
 			if ($cart_total_weight <= 1.5) {

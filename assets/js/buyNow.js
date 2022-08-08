@@ -58,7 +58,8 @@ window.onload = () => {
   // select the first in-stock variation
   const attrs = document.querySelectorAll('table.variations td.value')
   attrs.forEach(attr => {
-    const firstInStockSwatch = attr.querySelector('div.ux-swatch:not(.out-of-stock)')
+    // const firstInStockSwatch = attr.querySelector('div.ux-swatch:not(.out-of-stock)')
+    const firstInStockSwatch = attr.querySelector('div.ux-swatch:not(.disabled)')
     // if not already selected then select (could be selected by default from WC product variation settings)
     if (!firstInStockSwatch?.classList.contains('selected'))
       firstInStockSwatch?.click()
