@@ -1,7 +1,7 @@
 <div class="accordion-body">
   <div class="accordion">
     <div class="container">
-      <img loading="lazy" src="/wp-content/uploads/2022/08/size-ico-imanistudio.com.jpeg" alt="IMG" />
+      <img loading="lazy" src="/wp-content/uploads/2022/08/size-ico-imanistudio.com.png" alt="IMG" />
       <div class="label">PRODUCT DESCRIPTION</div>
       <div class="content"><?= do_shortcode("[product_description]") ?></div>
     </div>
@@ -12,7 +12,7 @@
       <div class="content">
         <div class="whats-ap whatsapp-desktop">
           <span>
-            <a class="whatsapp-btn" href="https://api.whatsapp.com/send?phone=+447734982915&amp;text=Hi, I want to consult about this product <?= $product_name ?> <?= $url ?>">
+            <a class="whatsapp-btn" target="_blank" href="https://api.whatsapp.com/send?phone=+447734982915&amp;text=Hi, I want to consult about this product <?= $args['product-name'] ?> <?= $args['product-url'] ?>">
               <div class="inner-whatsapp">
                 <img loading="lazy" src="<?= get_site_url() ?>/wp-content/uploads/2022/04/download imani studio.pk .webp" style="padding-right: 4px; padding-bottom: 2px;" alt="IMG" />
                 <span class="whats-txtt">Chat with fashion consultant</span>

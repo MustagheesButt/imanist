@@ -2,12 +2,16 @@
 // Add custom Theme Functions here
 // 
 // 
+/*
 function lsp_rename_image($filename)
 {
 	$info = pathinfo($filename);
 	$ext  = empty($info['extension']) ? '' : '.' . $info['extension'];
-	$name = basename($filename, $ext);
-	return $name . "-imanistudio.com" . $ext;
+	if ($ext == ".jpeg" || $ext == ".png" || $ext == ".webp" || $ext == ".jpg") {
+		$name = basename($filename, $ext);
+		return $name . "-imanistudio.com" . $ext;
+	}
+	return $filename;
 }
 add_filter('sanitize_file_name', 'lsp_rename_image', 10);
 
@@ -16,7 +20,7 @@ add_image_size('archiveproduct-thumb', 318, 476); //archive product thumbnails
 add_image_size('homepage-thumb size', 220, 180);
 add_image_size('products-thumb size', 254, 381);
 add_image_size('mobile-menu-thumbs', 120, 75);
-
+*/
 
 // add_filter( 'woocommerce_breadcrumb_defaults', 'wcc_change_breadcrumb_home_text' );
 // function wcc_change_breadcrumb_home_text( $defaults ) {
@@ -111,7 +115,6 @@ function custom_styling_scripts()
 add_filter('woocommerce_sale_flash', 'add_percentage_to_sale_badge', 20, 3);
 function add_percentage_to_sale_badge($html, $post, $product)
 {
-
 	if ($product->is_type('variable')) {
 		$percentages = array();
 
@@ -133,7 +136,7 @@ function add_percentage_to_sale_badge($html, $post, $product)
 
 		$percentage    = round(100 - ($sale_price / $regular_price * 100)) . '%';
 	}
-	$html = '<span class="onsale">' . esc_html__('-', 'woocommerce') . '' . $percentage . '</span>';
+	$html = '<div class="onsale">' . esc_html__('-', 'woocommerce') . '' . $percentage . '</div>';
 	return $html;
 }
 
@@ -199,7 +202,7 @@ function floating_social_links()
 		<!-- <a href="https://facebook.com/ImaniStudio/" target="_blank" class="icon button circle facebook">
 			<i class="icon-facebook"></i>
 		</a> -->
-		<a href="https://messenger.com/ImaniStudio/" target="_blank" class="icon button fb-messenger">
+		<a href="https://m.me/ImaniStudio" target="_blank" class="icon button fb-messenger">
 			<svg style="width: 20px; height: 20px;">
 				<use href="#fb-messenger" />
 			</svg>
@@ -275,12 +278,15 @@ function imani_product_meta_links()
 	$product_id = $product->get_id(); // The product ID
 
 	$brands = get_the_terms($product_id->ID, 'product_brand');
-	$brand = array_values(array_filter($brands, function ($b) {
-		return $b->parent == 0;
-	}))[0];
-	$sub_brands = array_values(array_filter($brands, function ($b) use ($brand) {
-		return $b->parent == $brand->term_id;
-	}));
+	if ($brands) {
+		$brand = array_values(array_filter($brands, function ($b) {
+			return $b->parent == 0;
+		}))[0];
+		$sub_brands = array_values(array_filter($brands, function ($b) use ($brand) {
+			return $b->parent == $brand->term_id;
+		}));
+	}
+
 	$category_id = get_post_meta($product_id, 'rank_math_primary_product_cat', true);
 	if (!empty($category_id))
 		$category = get_term($category_id, 'product_cat');
@@ -332,24 +338,55 @@ add_action('woocommerce_single_product_summary', 'wishlist_and_share_single_prod
 add_shortcode('product_description', 'display_product_description');
 function display_product_description($atts)
 {
-	$atts = shortcode_atts(array(
+	$atts = shortcode_atts([
 		'id' => get_the_id(),
-	), $atts, 'product_description');
+	], $atts, 'product_description');
 
 	global $product;
 
 	if (!is_a($product, 'WC_Product'))
 		$product = wc_get_product($atts['id']);
 
-	return $product->get_description();
+	return apply_filters('imani_prod_desc', $product->get_description());
 }
+
+function imani_product_description_filter($content)
+{
+	if (is_product()) {
+		global $product;
+		$suffix = "<strong style='color:red;'>Disclaimer</strong>: Product colour may vary slightly due to photographic lighting or your device settings.";
+		$delivery = strtolower($product->get_attribute('delivery'));
+		if (str_contains($delivery, "10-12 weeks")) {
+			$suffix = $suffix . "<p><strong>Making Time:</strong>
+			8-12 weeks</p>
+			<p>Expedited production available for additional fee</p>
+			<p><strong>Shipping Time</strong>
+			5-6 days
+			Get in touch with us & know more</p>";
+		} elseif (str_contains($delivery, "6-8 weeks")) {
+			$suffix = $suffix . "<strong>Made To Order</strong> :6-8 weeks
+			<p>Expedited production available for additional fee.</p>";
+		} elseif (str_contains($delivery, "2-4 weeks")) {
+			$suffix = $suffix . "Standard Delivery Within 14 Working days";
+		} elseif (str_contains($delivery, "custom")) {
+			$suffix = $suffix . "Contact us for exact delivery";
+		} elseif (str_contains($delivery, "same day shipment") || $delivery == "") {
+			$suffix = $suffix . "<p><strong style='color:red;'>Delivery</strong>: Standard Delivery Within 2-4 Working Day, Express Next Day Delivery Options are available at checkout.</p>";
+		}
+		return $content . $suffix;
+	}
+	return $content;
+}
+add_filter('imani_prod_desc', 'imani_product_description_filter');
+add_filter('the_content', 'imani_product_description_filter');
 
 function accordin_add_after_social()
 {
 	global $product;
 	$product_name = $product->get_title();
 	$url = get_permalink($product->ID);
-	get_template_part('template-parts/single-product-accordian');
+	$args = ['product-name' => $product_name, 'product-url' => $url];
+	get_template_part('template-parts/single-product-accordian', null, $args);
 }
 add_action('woocommerce_after_add_to_cart_form', 'accordin_add_after_social');
 
@@ -393,6 +430,7 @@ function buy_now_button()
 add_action('woocommerce_after_add_to_cart_button', 'buy_now_button');
 
 // this is a pluggable function
+// flatsome/inc/woocommerce/structure-wc-category-page-header.php
 function flatsome_category_header()
 {
 	global $wp_query;
@@ -455,6 +493,11 @@ function top_seo_content()
 }
 add_action('imani_top_seo_content', 'top_seo_content');
 
+// add top/bottom content for brands
+add_action('product_brand_edit_form_fields', 'top_text_taxonomy_edit_meta_field', 10, 2);
+add_action('product_brand_edit_form_fields', 'bottom_text_taxonomy_edit_meta_field', 10, 2);
+add_action('edited_product_brand', 'fl_save_taxonomy_custom_meta', 10, 2);
+
 function child_flatsome_products_footer_content()
 {
 	if (is_shop() || is_product_category() || is_product_tag() || is_product_taxonomy()) {
@@ -495,19 +538,78 @@ add_action('imani_before_category_title', 'breadcrumbs', 30);
 
 function spit_category_buttons()
 {
-	$brand = get_query_var('product_brand');
-	if (!empty($brand)) {
-		$categories = wp_get_post_terms(get_the_ID(), 'product_brand', ["fields" => "all"]);
-	} else {
-		$categories = wp_get_post_terms(get_the_ID(), 'product_cat', ["fields" => "all"]);
+	$current_term = get_queried_object();
+	$sub_terms = get_terms([
+		'taxonomy'    => $current_term->taxonomy,
+		'hide_empty'  => true,
+		'parent'      => $current_term->term_id
+	]);
+	if (empty($sub_terms)) {
+		if ($current_term->taxonomy === "product_brand") {
+			$sub_terms = get_terms([
+				'taxonomy'    => 'product_cat',
+				'hide_empty'  => true,
+				'parents'     => [452, 461, 457, 462, 418] // women
+			]);
+		} else {
+			$sub_terms = array_filter(get_terms([
+				'taxonomy'    => $current_term->taxonomy,
+				'hide_empty'  => true,
+				'parent'      => $current_term->parent
+			]), function ($term) use ($current_term) {
+				return $term->term_id != $current_term->term_id;
+			});
+		}
 	}
 
-	foreach ($categories as $cat) {
-		$link = get_term_link($cat);
-		echo "<a href='{$link}' class='button'>{$cat->name}</a>";
+	foreach ($sub_terms as $st) {
+		$link = get_term_link($st);
+		echo "<a href='{$link}' style='flex-shrink: 0;' class='button'>{$st->name}</a>";
 	}
 }
 add_action('imani_brand_or_category_buttons', 'spit_category_buttons');
+
+// For use in above function only
+add_filter('terms_clauses', function ($pieces, $taxonomies, $args) {
+	// Bail if we are not currently handling our specified taxonomy
+	if (!in_array('product_cat', $taxonomies))
+		return $pieces;
+
+	// Check if our custom argument, 'parents' is set, if not, bail
+	if (
+		!isset($args['parents'])
+		|| !is_array($args['parents'])
+	)
+		return $pieces;
+
+	// If  'parents' is set, make sure that 'parent' and 'child_of' is not set
+	if (
+		$args['parent']
+		|| $args['child_of']
+	)
+		return $pieces;
+
+	// Validate the array as an array of integers
+	$parents = array_map('intval', $args['parents']);
+
+	// Loop through $parents and set the WHERE clause accordingly
+	$where = [];
+	foreach ($parents as $parent) {
+		// Make sure $parent is not 0, if so, skip and continue
+		if (0 === $parent)
+			continue;
+
+		$where[] = " tt.parent = '$parent'";
+	}
+
+	if (!$where)
+		return $pieces;
+
+	$where_string = implode(' OR ', $where);
+	$pieces['where'] .= " AND ( $where_string ) ";
+
+	return $pieces;
+}, 10, 3);
 
 // Pluggable function - for category/shop page title
 function flatsome_category_title()
@@ -515,25 +617,62 @@ function flatsome_category_title()
 	if (!get_theme_mod('category_show_title', 0)) {
 		return;
 	} ?>
-	<h1 class="shop-page-title is-xxxlarge text-center uppercase"><?php woocommerce_page_title(); ?></h1>
+	<h1 class="shop-page-title is-xxxlarge text-center uppercase">
+		<?php
+		$title = get_the_archive_description();
+		if (!empty($title) && (is_product_category() || is_product_tag() || is_product_taxonomy())) {
+			echo $title;
+		} else {
+			woocommerce_page_title();
+		}
+		?>
+	</h1>
 <?php
 }
 
 function estimated_shipping_date()
 {
-	// $product = wc_get_product(get_the_ID());
+	global $product;
+	$today = date_create();
+	// Make sure in WP timezone is set to London/UK
+	$current_hour = current_time('H'); // 0 - 23
+	$current_day = current_time('D'); // Sun, Mon etc...
 	$delivery = $product->get_attribute('delivery');
-	if (str_contains($delivery, "Same Day Shipment")) {
-		$days = "2 days";
-	} else {
-		$days = "10 days";
+
+	if (str_contains($delivery, "Same Day Shipment") || $delivery == "") {
+		$days = "0 days";
+
+		if ($current_hour >= 16) {
+			$days = "1 days";
+		}
+
+		switch ($current_day) {
+			case 'Fri':
+				if ($current_hour >= 16)
+					$days = "3 days";
+				break;
+			case 'Sat':
+				$days = "2 days";
+				break;
+			case 'Sun':
+				$days = "1 days";
+				break;
+		}
+	} elseif (str_contains($delivery, "10-12 Weeks")) {
+		$days = "77 days";
+	} elseif (str_contains($delivery, "6-8 Weeks")) {
+		$days = "42 days";
+	} elseif (str_contains($delivery, "2-4 Weeks")) {
+		$days = "21 days";
+	} elseif ($delivery == "Custom") {
+		echo "<div class='button estimated-shipping'>Contact Us For Exact Date</div>";
+		return;
 	}
 
-	$d = date_create();
-	date_add($d, date_interval_create_from_date_string($days));
-	$d = date_format($d, "l, d M Y");
+	date_add($today, date_interval_create_from_date_string($days));
+	$shipping_date = date_format($today, "l, d M Y");
 
-	echo "<div style='padding: 10px; background-color: #e7e7e7;margin-bottom: 10px;'>Estimated Shipping Date: <strong>{$d}</strong></div>";
+	echo "<div class='button estimated-shipping'>Estimated Shipping Date: <strong>{$shipping_date}</strong></div>";
 }
 add_action('woocommerce_before_add_to_cart_button', 'estimated_shipping_date');
 
@@ -556,7 +695,14 @@ function imani_tab_titles($tabs)
 		'title' => __('Returns & Exchange', 'woocommerce'),
 		'priority' => 60,
 		'callback' => function () {
-			echo 'Lorem ipsum consit';
+			$text = "<p>You have the right to cancel your order within seven days from the receipt of the goods. We will offer you a refund which will exclude postage costs
+
+			<p>Please check your item as soon as you receive your parcel, If there is any fault or sizing issue please inform us immediately. Should you cancel your order, you will have your payment returned by calling us on Tel: (+44) 7734982915 or via email: imani@imanistudio.com. For bespoke outfits which are made to measure, we may not always be able to refund these items.
+			
+			<p>Please Note: We do not offer refunds or exchange on any of the items returned that has been, Altered, ironed, worn, damaged or have any kind of makeup, sweat or grease marks, perfume or bodily odour and are not in original condition or packaging.
+			
+			<p>All the refunds of any transaction's amount against any purchase through this website would be refunded to the original mode of payment.";
+			echo $text;
 		}
 	];
 
@@ -658,36 +804,38 @@ function imani_billing_phone_field()
 }
 //add_action('cfw_checkout_before_shipping_address', 'imani_billing_phone_field');
 
-function custom_registration_errors( $errors )
+function custom_registration_errors($errors)
 {
 	unset($errors->errors['empty_email']);
 }
-add_filter( 'registration_errors', 'custom_registration_errors' );
-add_action( 'register_new_user', 'custom_registration_errors' );
+add_filter('registration_errors', 'custom_registration_errors');
+add_action('register_new_user', 'custom_registration_errors');
 
 //Adding Prefix to order
 
-add_filter( 'woocommerce_order_number', 'change_woocommerce_order_number' );
+add_filter('woocommerce_order_number', 'change_woocommerce_order_number');
 
-function change_woocommerce_order_number( $order_id ) {
-    $prefix = '#IM-';
-    $suffix = '-ST';
-    $new_order_id = $prefix . $order_id . $suffix;
-    return $new_order_id;
+function change_woocommerce_order_number($order_id)
+{
+	$prefix = '#IM-';
+	$suffix = '-ST';
+	$new_order_id = $prefix . $order_id . $suffix;
+	return $new_order_id;
 }
 
-function imani_shipping_rates( $rates ) {
+function imani_shipping_rates($rates)
+{
 	// do maths in default currency
 	global $WOOCS;
 	$default_currency_rate = $WOOCS->get_currencies()[$WOOCS->current_currency]['rate'];
 
-	$cart_total_price = floatval( WC()->cart->get_cart_contents_total() );
+	$cart_total_price = floatval(WC()->cart->get_cart_contents_total());
 	$cart_total_price = $WOOCS->back_convert($cart_total_price, $default_currency_rate, 2);
 	$cart_total_weight = WC()->cart->get_cart_contents_weight();
 
-	foreach ( $rates as $rate_id => $rate ) {
+	foreach ($rates as $rate_id => $rate) {
 		// Domestic Standard
-		if ( 'flat_rate:46' === $rate_id ) {
+		if ('flat_rate:46' === $rate_id) {
 			if ($cart_total_price > 50) {
 				$rates[$rate_id]->cost = 0;
 			} elseif ($cart_total_weight <= 1) {
@@ -700,7 +848,7 @@ function imani_shipping_rates( $rates ) {
 		}
 
 		// Domestic Express
-		if ( 'flat_rate:43' === $rate_id ) {
+		if ('flat_rate:43' === $rate_id) {
 			// if ($cart_total_weight > 1.5) {
 			// 	$rates[$rate_id]->cost = 15;
 			// }
@@ -712,4 +860,4 @@ function imani_shipping_rates( $rates ) {
 
 	return $rates;
 }
-add_filter( 'woocommerce_package_rates', 'imani_shipping_rates', 100 );
+add_filter('woocommerce_package_rates', 'imani_shipping_rates', 100);

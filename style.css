@@ -292,6 +292,10 @@ span.amount {
     top: 0 !important;
   }
 }
+.mobile-sidebar .nav li:first-child {
+  margin-left: 5px !important;
+}
+
 .single-product .product-info .price-wrapper,
 .single-product .product-info .product-title {
   font-weight: 300;
@@ -455,6 +459,21 @@ header .dd-options label {
 .product-small .cwg_popup_submit {
   display: none;
 }
+.product-small .badge-container {
+  margin: 4px 0 0 4px;
+}
+.product-small .onsale {
+  background-color: #fcfcfc !important;
+  color: #99383c !important;
+  box-shadow: 2px 2px 3px #343d52;
+  text-align: center;
+  padding: 6px 7px;
+  border-radius: 100px;
+  height: 25px;
+  width: 44px;
+  font-size: 14px;
+  line-height: 100%;
+}
 
 .yith-wcwl-add-to-wishlist a {
   background-color: transparent !important;
@@ -479,12 +498,15 @@ header .dd-options label {
   display: block;
   margin-bottom: 15px;
 }
-#shop-sidebar .widget ul {
+#shop-sidebar .widget > ul {
   max-height: 300px;
   overflow-y: scroll;
   border-bottom: 1px solid lightgray;
 }
-#shop-sidebar .widget ul > li .count {
+#shop-sidebar .widget > ul > li ul {
+  border-left: none;
+}
+#shop-sidebar .widget > ul > li .count {
   display: none;
 }
 #shop-sidebar .widget > ul > li + li {
@@ -636,33 +658,6 @@ table.variations th.label {
   display: none !important;
 }
 
-@media (max-width: 767px) {
-  span.onsale {
-    margin-left: 5px;
-    margin-top: -28px;
-  }
-}
-@media (min-width: 768px) {
-  span.onsale {
-    margin-top: -22px;
-    margin-left: 5px;
-  }
-}
-span.onsale {
-  display: block;
-  background-color: #fcfcfc !important;
-  color: #99383c !important;
-  box-shadow: 2px 2px 3px #343d52;
-  text-align: center;
-  float: right;
-  padding: 6px 7px;
-  border-radius: 100px;
-  height: 25px;
-  width: 44px;
-  font-size: 14px;
-  line-height: 100%;
-}
-
 .product-container .onsale {
   display: none;
 }
@@ -788,6 +783,7 @@ del span.woocommerce-Price-amount.amount {
 }
 .accordion .container.active .content {
   max-height: 1500px;
+  margin-top: 10px;
 }
 .accordion .container.active .label::before {
   /* Changes from plus sign to negative sign once active */
@@ -855,6 +851,14 @@ label.qty {
 
 .stock.in-stock {
   display: none;
+}
+
+.grecaptcha-badge {
+  visibility: hidden;
+}
+
+.instagram-image-container img {
+  height: auto !important;
 }
 
 /* Following 2 rules should be in CheckoutWC > Appearance > Custom CSS */
