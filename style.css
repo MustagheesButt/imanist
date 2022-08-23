@@ -286,6 +286,10 @@ span.amount {
   .jumbotron .flickity-viewport {
     height: 145px !important;
   }
+  .woocommerce-wishlist .product-remove {
+    left: unset !important;
+    right: 0;
+  }
   /* On mobile the overlay doesnt stays fixed cuz of some stupid JS */
   .mfp-wrap {
     position: fixed !important;
@@ -386,7 +390,7 @@ header .dd-options label {
 }
 
 .xoo-el-sidebar {
-  background-image: url("/wp-content/uploads/2022/03/download-1 imani studio.pk .webp") !important;
+  background-image: url("/wp-content/uploads/2022/07/wedding-home-imanistudio.com-scaled.jpg") !important;
   background-size: contain !important;
 }
 
@@ -401,6 +405,7 @@ header .dd-options label {
   overflow: hidden;
   text-overflow: ellipsis;
   color: gray;
+  text-transform: uppercase;
 }
 
 .continue-shopping,
@@ -710,6 +715,7 @@ del span.woocommerce-Price-amount.amount {
   height: -moz-fit-content;
   height: fit-content;
   margin: auto;
+  z-index: 1;
 }
 #fixed-social-links .icon {
   outline: 1px solid;
@@ -849,8 +855,22 @@ label.qty {
   width: 100%;
 }
 
-.stock.in-stock {
+.stock.in-stock,
+.shop-page-title .rank-math-breadcrumb,
+.product-info .rank-math-breadcrumb {
   display: none;
+}
+
+.woocommerce-wishlist .product-remove {
+  min-width: 24px;
+}
+.woocommerce-wishlist:not(.logged-in) .page-wrapper {
+  margin: 0 10%;
+}
+
+/* from plugin settings, setting it to center does not seems to work */
+div.nsl-container[data-align=left], .my-account .woocommerce-message {
+  text-align: center !important;
 }
 
 .grecaptcha-badge {

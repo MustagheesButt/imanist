@@ -1,7 +1,9 @@
 <?php
 // Add custom Theme Functions here
 // 
-// 
+//
+
+// Enable image file renaming (at your own risk)
 /*
 function lsp_rename_image($filename)
 {
@@ -28,7 +30,7 @@ add_image_size('mobile-menu-thumbs', 120, 75);
 // 	$defaults['Shopping Cart'] = 'Cart';
 // 	return $defaults;
 // }
-add_action('woocommerce_checkout_before_customer_details', 'loginpage');
+/*add_action('woocommerce_checkout_before_customer_details', 'loginpage');
 function loginpage()
 {
 	$html = '<div class="layout-flex layout-flex--tight-vertical layout-flex--loose-horizontal layout-flex--wrap">
@@ -43,8 +45,7 @@ function loginpage()
 				</p>
 			</div>';
 	echo $html;
-}
-
+}*/
 
 add_action('wp_head', 'pop_up_js');
 function pop_up_js()
@@ -52,12 +53,14 @@ function pop_up_js()
 	if (!is_user_logged_in()) { ?>
 		<script>
 			jQuery(document).ready(function() {
-				jQuery(".wishlist-icon .wishlist-button").click(function() {
+				/*jQuery(".wishlist-icon .wishlist-button").click(function() {
 					jQuery(this).addClass("xoo-el-login-tgr");
 					e.preventDefault();
-				});
+				});*/
 
-				jQuery(".xoo-el-password_cont").append('<div id="nsl-custom-login-form-main"><div class="nsl-container nsl-container-block" data-align="left"><div class="nsl-container-buttons"><a href="/wp-login.php?loginSocial=facebook&amp;redirect=<?= get_site_url() ?>%2Fwp-admin%2F" rel="nofollow" aria-label="Continue with <b>Facebook</b>" data-plugin="nsl" data-action="connect" data-provider="facebook" data-popupwidth="600" data-popupheight="679"><div class="nsl-button nsl-button-default nsl-button-facebook" data-skin="dark" style="background-color:#1877F2;"><div class="nsl-button-svg-container"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1365.3 1365.3" height="1365.3" width="1365.3"><path d="M1365.3 682.7A682.7 682.7 0 10576 1357V880H402.7V682.7H576V532.3c0-171.1 102-265.6 257.9-265.6 74.6 0 152.8 13.3 152.8 13.3v168h-86.1c-84.8 0-111.3 52.6-111.3 106.6v128h189.4L948.4 880h-159v477a682.8 682.8 0 00576-674.3" fill="#fff"></path></svg></div><div class="nsl-button-label-container">Continue with <b>Facebook</b></div></div></a></div></div></div>');
+				jQuery(".xoo-el-form-login, .xoo-el-form-register").prepend(`
+					<?= do_shortcode('[nextend_social_login]'); ?>
+				`);
 			});
 		</script>
 	<?php } ?>
@@ -68,7 +71,7 @@ function pop_up_js()
 	</style>
 	<script>
 		jQuery(document).ready(function() {
-			jQuery(".account-item").addClass('xoo-el-login-tgr');
+			jQuery("header .account-item").addClass('xoo-el-login-tgr');
 		});
 	</script>
 
@@ -278,7 +281,7 @@ function imani_product_meta_links()
 	$product_id = $product->get_id(); // The product ID
 
 	$brands = get_the_terms($product_id->ID, 'product_brand');
-	if ($brands) {
+	if ($brands && !is_wp_error($brands)) {
 		$brand = array_values(array_filter($brands, function ($b) {
 			return $b->parent == 0;
 		}))[0];
@@ -378,7 +381,7 @@ function imani_product_description_filter($content)
 	return $content;
 }
 add_filter('imani_prod_desc', 'imani_product_description_filter');
-add_filter('the_content', 'imani_product_description_filter');
+//add_filter('the_content', 'imani_product_description_filter');
 
 function accordin_add_after_social()
 {
@@ -549,8 +552,13 @@ function spit_category_buttons()
 			$sub_terms = get_terms([
 				'taxonomy'    => 'product_cat',
 				'hide_empty'  => true,
-				'parents'     => [452, 461, 457, 462, 418] // women
+				'parents'     => [452, 461, 457, 462, 418] // women categories ('parents' filter is made possible by the below 'add_filter')
 			]);
+
+			// for some reason, 'hide_empty' does not works as expected so we do it ourselves
+			$sub_terms = array_filter($sub_terms, function ($st) {
+				return $st->count !== 0;
+			});
 		} else {
 			$sub_terms = array_filter(get_terms([
 				'taxonomy'    => $current_term->taxonomy,
@@ -639,7 +647,7 @@ function estimated_shipping_date()
 	$current_day = current_time('D'); // Sun, Mon etc...
 	$delivery = $product->get_attribute('delivery');
 
-	if (str_contains($delivery, "Same Day Shipment") || $delivery == "") {
+	if (str_contains($delivery, "Same Day Shipment") || empty($delivery)) {
 		$days = "0 days";
 
 		if ($current_hour >= 16) {
@@ -689,6 +697,9 @@ add_filter('woocommerce_get_availability_text', 'imani_change_soldout', 10, 2);
 function imani_tab_titles($tabs)
 {
 	$tabs['description']['title'] = __('Dress Details', 'woocommerce');
+	$tabs['description']['callback'] = function () {
+		echo do_shortcode('[product_description]');
+	};
 	$tabs['additional_information']['title'] = __('Weight & Size', 'woocommerce');
 
 	$tabs['returns'] = [
@@ -819,7 +830,10 @@ function change_woocommerce_order_number($order_id)
 {
 	$prefix = '#IM-';
 	$suffix = '-ST';
-	$new_order_id = $prefix . $order_id . $suffix;
+	$order_id_ = (int)$order_id;
+	$order_id_ = $order_id_ - 19324;
+	$iorder_id = strval($order_id_);
+	$new_order_id = $prefix . $iorder_id . $suffix;
 	return $new_order_id;
 }
 

@@ -84,7 +84,9 @@ window.onload = () => {
   }
 
   const iObserver = new IntersectionObserver(fixAddToCartContainer, options)
-  const target = document.querySelector('div.quantity')
+  let target = document.querySelector('div.quantity')
+  if (!target || target.classList.contains('hidden'))
+    target = document.querySelector('div.price-wrapper')
 
   iObserver.observe(target)
 
