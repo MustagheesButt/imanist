@@ -1,0 +1,6 @@
+<div class="col-inner">
+  <p>We aim to dispatch your orders within 1-3 working days from the receipt of your orders. Orders posted within the UK are usually received within 3-5 working days for standard, 2-3 working days for 1st class recorded and before 5pm for next day deliveries. International orders will usually arrive within 3 - 7 days of dispatch.</p>
+  <p>Any customs or import duties are levied once the package reaches its destination country. Additional charges for customs clearance must be borne by the recipient. We have no control over these charges and cannot predict what they may be. Customs policies vary widely from country to country; you may want to contact your local customs office for further information.</p>
+  <p>Ordering over the Internet with imanistudio.com is the safest and most secure method of paying and therefore we accept orders placed online - but if you visit our studio you can buy or make-to-order in person!</p>
+  <p>We use Royal Mail, Parcelforce and Deltec for deliveries within the UK. We use Royal Mail and Parcelforce, DHL, UPS, Sky NET to Europe and Rest of World.</p>
+</div>

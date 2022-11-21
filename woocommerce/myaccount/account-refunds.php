@@ -1,0 +1,6 @@
+<div class="std">
+  <p>You have the right to cancel your order within seven days from the receipt of the goods. We will offer you a refund which will exclude postage costs</p>
+  <p>Please check your item as soon as you receive your parcel, If there is any fault or sizing issue please inform us immediately. Should you cancel your order, you will have your payment returned by calling us on Tel: (+44) 7734982915 or via email: <a href="mailto:imani@imanistudio.com">imani@imanistudio.com</a>. For bespoke outfits which are made to measure, we may not always be able to refund these items.</p>
+  <p>Please Note: We do not offer refunds or exchange on any of the items returned that has been, Altered, ironed, worn, damaged or have any kind of makeup, sweat or grease marks, perfume or bodily odour and are not in original condition or packaging.</p>
+  <p>All the refunds of any transaction's amount against any purchase through this website would be refunded to the original mode of payment.</p>
+</div>

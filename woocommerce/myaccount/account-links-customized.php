@@ -62,7 +62,7 @@
     </div> -->
 
     <div class="">
-      <a class="side-link" href="/delivery-policy/">
+      <a class="side-link" href="/my-account/delivery/">
         <svg class="icon">
           <use href="#returns" />
         </svg>
@@ -71,7 +71,7 @@
     </div>
 
     <div class="">
-      <a class="side-link" href="/refund-policy/">
+      <a class="side-link" href="/my-account/refunds/">
         <svg class="icon">
           <use href="#refund" />
         </svg>

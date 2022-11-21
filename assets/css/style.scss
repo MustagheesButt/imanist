@@ -202,34 +202,6 @@ span.amount {
     }
   }
 
-  .product-gallery .flickity-slider {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-
-    >div.col {
-      width: 15px;
-      height: 15px;
-      background-color: gray;
-      border-radius: 50%;
-      padding: 0 !important;
-      position: initial !important;
-      flex-basis: unset !important;
-    }
-
-    >div.col.is-selected {
-      background-color: black;
-    }
-
-    >div.col>a {
-      display: none;
-    }
-  }
-
-  .product-gallery .product-thumbnails .flickity-button {
-    display: none;
-  }
-
   .slider .flickity-prev-next-button {
     opacity: 1;
     background-color: #ffffff5e;
@@ -560,6 +532,14 @@ header {
 
   .badge-container {
     margin: 4px 0 0 4px;
+
+    & > div:not(:first-child) {
+      margin-top: 7px;
+    }
+
+    .badge-circle {
+      margin-left: 0;
+    }
   }
 
   .onsale {
@@ -1010,13 +990,15 @@ label.qty {
   .product-remove {
     min-width: 24px;
   }
+
   &:not(.logged-in) .page-wrapper {
     margin: 0 10%;
   }
 }
 
 /* from plugin settings, setting it to center does not seems to work */
-div.nsl-container[data-align="left"], .my-account .woocommerce-message {
+div.nsl-container[data-align="left"],
+.my-account .woocommerce-message {
   text-align: center !important;
 }
 
@@ -1026,6 +1008,20 @@ div.nsl-container[data-align="left"], .my-account .woocommerce-message {
 
 .instagram-image-container img {
   height: auto !important;
+}
+
+.login-or {
+  text-align: center;
+
+  &::before, &::after {
+    content: "";
+    border-bottom: 1px solid lightgray;
+    width: 5em;
+    display: inline-block;
+    margin: 0 5px;
+    position: relative;
+    top: -0.2em;
+  }
 }
 
 /* Following 2 rules should be in CheckoutWC > Appearance > Custom CSS */

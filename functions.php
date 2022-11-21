@@ -60,6 +60,7 @@ function pop_up_js()
 
 				jQuery(".xoo-el-form-login, .xoo-el-form-register").prepend(`
 					<?= do_shortcode('[nextend_social_login]'); ?>
+					<p class="xoo-aff-group login-or">or login using your account</p>
 				`);
 			});
 		</script>
@@ -554,11 +555,6 @@ function spit_category_buttons()
 				'hide_empty'  => true,
 				'parents'     => [452, 461, 457, 462, 418] // women categories ('parents' filter is made possible by the below 'add_filter')
 			]);
-
-			// for some reason, 'hide_empty' does not works as expected so we do it ourselves
-			$sub_terms = array_filter($sub_terms, function ($st) {
-				return $st->count !== 0;
-			});
 		} else {
 			$sub_terms = array_filter(get_terms([
 				'taxonomy'    => $current_term->taxonomy,
@@ -568,6 +564,11 @@ function spit_category_buttons()
 				return $term->term_id != $current_term->term_id;
 			});
 		}
+
+		// for some reason, 'hide_empty' does not works as expected so we do it ourselves
+		$sub_terms = array_filter($sub_terms, function ($st) {
+			return $st->count !== 0;
+		});
 	}
 
 	foreach ($sub_terms as $st) {
@@ -640,14 +641,14 @@ function flatsome_category_title()
 
 function estimated_shipping_date()
 {
+	// Make sure in WP timezone is set to London/UK
 	global $product;
 	$today = date_create();
-	// Make sure in WP timezone is set to London/UK
-	$current_hour = current_time('H'); // 0 - 23
-	$current_day = current_time('D'); // Sun, Mon etc...
 	$delivery = $product->get_attribute('delivery');
 
 	if (str_contains($delivery, "Same Day Shipment") || empty($delivery)) {
+		$current_hour = current_time('H'); // 0 - 23
+		$current_day = current_time('D'); // Sun, Mon etc...
 		$days = "0 days";
 
 		if ($current_hour >= 16) {
@@ -875,3 +876,27 @@ function imani_shipping_rates($rates)
 	return $rates;
 }
 add_filter('woocommerce_package_rates', 'imani_shipping_rates', 100);
+
+add_action('init', function () {
+	add_rewrite_endpoint('refunds', EP_ROOT | EP_PAGES);
+	add_rewrite_endpoint('delivery', EP_ROOT | EP_PAGES);
+});
+
+add_action('woocommerce_account_refunds_endpoint', function () {
+	wc_get_template('myaccount/account-refunds.php');
+});
+
+add_action('woocommerce_account_delivery_endpoint', function () {
+	wc_get_template('myaccount/account-delivery.php');
+});
+
+
+function imani_enqueue_scripts() {
+  if ( is_product() ) {
+    echo "<link rel='preload' href='/wp-content/themes/imanistudio/assets/css/single-product.css' as='style'>";
+		echo "<link rel='stylesheet' href='/wp-content/themes/imanistudio/assets/css/single-product.css'>";
+  } else {
+    /** Call regular enqueue */
+  }
+}
+add_action( 'wp_enqueue_scripts', 'imani_enqueue_scripts' );

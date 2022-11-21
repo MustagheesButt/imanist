@@ -1,0 +1,29 @@
+@media only screen and (max-width: 48em) {
+  .product-gallery .flickity-slider {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .product-gallery .flickity-slider>div.col {
+    width: 15px;
+    height: 15px;
+    background-color: gray;
+    border-radius: 50%;
+    padding: 0 !important;
+    position: initial !important;
+    flex-basis: unset !important;
+  }
+
+  .product-gallery .flickity-slider>div.col.is-selected {
+    background-color: black;
+  }
+
+  .product-gallery .flickity-slider>div.col>a {
+    display: none;
+  }
+
+  .product-gallery .product-thumbnails .flickity-button {
+    display: none;
+  }
+}
